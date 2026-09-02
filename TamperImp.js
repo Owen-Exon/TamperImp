@@ -123,6 +123,9 @@
     ul.tokens .count {
       min-width: 50px !important;
     }
+    #vote {
+      background: unset !important;
+    }
     #vote .overlay {
       padding: 10px !important;
       background: rgba(0, 0, 0, 0.5) !important;
@@ -153,7 +156,7 @@
     }
     .votes *,
     .has-vote *,
-    .players *, 
+    .players:not(.tabs) *, 
     .meta,
     .alive,
     .reminder.add .icon {
@@ -162,13 +165,13 @@
     .info li:not(.edition-title-author) span:not(.meta) {
       display:flex !important;
       align-items:center;
-      gap:5px;
       height:1.75em;
     }
     .edition-title-author {
       text-align:center;
     }
     .edition-title {
+      padding-left:10px;
       text-align: center !important;
       flex-basis: 100% !important;
       font-family: LHF_Unlovable, sans-serif !important;
@@ -199,13 +202,24 @@
       background-size: 70% !important;
     }
     .info {
-      padding: 5px 15px 5px 15px !important;
+      padding: 5px !important;
       background: rgba(0, 0, 0, 0.5) !important;
       border-radius: 10px !important;
       border: 3px solid black !important;
       filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5)) !important;
       height: unset !important;
       width: min-content !important;
+    }
+    .info li:nth-last-child(1) >:not(:last-child)::after,
+    .info li:nth-last-child(2) >:nth-child(2)::after {
+      content: "|";
+      color:#fff5
+    }
+    .info li:nth-last-child(1) >:not(:last-child)::after {
+      margin: 0 5px 0 1px;
+    }
+    .info li:nth-last-child(2) >:nth-child(2)::after {
+      margin: 0 5px 0 5px;
     }
     .player .shroud::before {
       background: url("${data_shroud}") center center no-repeat !important;
@@ -218,6 +232,7 @@
       background-size: 70%,contain !important;
       width: 1.5em !important;
       height: 1.5em !important;
+      margin:3px !important;
     }
     .has-vote {
       background: url("${data_voteToken}") center center no-repeat !important;
@@ -233,9 +248,9 @@
     span:has(> .alive) {
       order: -1 !important
     }
-    span:has(> .players)::before {
-      content : " / ";
-      margin-left: 5px
+    span:has(> .players:not(.tabs))::before {
+      content : "/";
+      margin: 3px
     }
     .reminder {
       background-image: url("${data_Reminder}") !important;
@@ -260,12 +275,10 @@
       background-image: url("${data_binSVG}");
       width:50% !important;
     }
-    .players {
+    .players:not(.tabs) {
       background: url("${data_lifeToken}") center center no-repeat !important;
-      background-size: contain !important;
-      width: 1.5em !important;
-      height: 1.5em !important;
     }
+    .players:not(.tabs),
     svg.demon.svg-inline--fa,
     svg.minion.svg-inline--fa,
     svg.outsider.svg-inline--fa,
@@ -276,9 +289,7 @@
       height: 1.5em !important;
       background-position:center centre !important;
       background-repeat:no-repeat !important;
-      margin-right:0px !important;
-      margin-left:3px !important;
-      order:-1;
+      margin:3px !important;
     }
     svg.demon.svg-inline--fa {background-image: url("${data_demon}") !important;}
     svg.minion.svg-inline--fa {background-image: url("${data_minion}") !important;}
