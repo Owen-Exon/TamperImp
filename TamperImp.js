@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name     TamperImp
 // @namespace  https://raw.githubusercontent.com/Owen-Exon/TamperImp/refs/heads/main/TamperImp.js
-// @version    0.0.6
+// @version    0.0.7
 // @description  Various changes to UI and interactions
 // @match    *://clocktower.live/*
 // @grant    none
@@ -109,12 +109,12 @@
 
   const style = document.createElement('style');
   style.textContent = `
-  @font-face {
-    font-family: "LHF_Unlovable";
-    src: url("${data_LHF_Unlovable}") format("truetype");
-    font-display: swap;
-  }
-  .token {
+    @font-face {
+      font-family: "LHF_Unlovable";
+      src: url("${data_LHF_Unlovable}") format("truetype");
+      font-display: swap;
+    }
+    .token {
       background-image: url("${data_TokenImage}") !important;
     }
     ul.tokens li:not(.count) {
@@ -150,7 +150,7 @@
       width: 100%;
       filter: drop-shadow(0 0 2px rgba(0, 0, 0, .7));
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap !important;
       justify-content: center;
       text-shadow: 0 2px 1px #000, 0 -2px 1px #000, 2px 0 1px #000, -2px 0 1px #000;
     }
@@ -162,16 +162,18 @@
     .reminder.add .icon {
       display:none !important;
     }
-    .info li:not(.edition-title-author) span:not(.meta) {
+    .info li:not(.edition-title-author) span:not(.meta):not(:has(.fa-cloud-moon)) {
       display:flex !important;
       align-items:center;
       height:1.75em;
     }
     .edition-title-author {
       text-align:center;
+      flex-direction: column;
     }
     .edition-title {
-      padding-left:10px;
+      margin-left: 10px;
+      margin-right: 10px;
       text-align: center !important;
       flex-basis: 100% !important;
       font-family: LHF_Unlovable, sans-serif !important;
@@ -179,7 +181,6 @@
       font-size:min(6vh,6vw) !important;
       letter-spacing: 0mm !important;
       word-spacing:-3mm !important;
-      margin:0 !important;
       margin-bottom:-0.2em !important;
       white-space: nowrap !important;
     }
@@ -210,16 +211,18 @@
       height: unset !important;
       width: min-content !important;
     }
-    .info li:nth-last-child(1) >:not(:last-child)::after,
-    .info li:nth-last-child(2) >:nth-child(2)::after {
-      content: "|";
-      color:#fff5
+    .info > li > span:has(.players)::after,
+    .info > li > span:has(.townsfolk)::after,
+    .info > li > span:has(.outsider)::after,
+    .info > li > span:has(.minion)::after,
+    .info > li:has(.traveller) > span:has(.demon)::after {
+      content: "|" !important;
+      color: #fff5 !important;
+      margin: 0 5px 0 1px !important;
+      font-weight:100 !important;
     }
-    .info li:nth-last-child(1) >:not(:last-child)::after {
-      margin: 0 5px 0 1px;
-    }
-    .info li:nth-last-child(2) >:nth-child(2)::after {
-      margin: 0 5px 0 5px;
+    .info > li > span:has(.fa-cloud-moon) {
+      display:none !important;
     }
     .player .shroud::before {
       background: url("${data_shroud}") center center no-repeat !important;
@@ -252,7 +255,8 @@
       content : "/";
       margin: 3px
     }
-    .reminder {
+    .circle .reminder,
+    ul.reminders .reminder {
       background-image: url("${data_Reminder}") !important;
     }
     .reminder .text {
@@ -287,7 +291,7 @@
       background-size: contain !important;
       width: 1.5em !important;
       height: 1.5em !important;
-      background-position:center centre !important;
+      background-position:center center !important;
       background-repeat:no-repeat !important;
       margin:3px !important;
     }
