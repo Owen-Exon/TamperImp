@@ -4,15 +4,16 @@
 // @version    0.0.8
 // @description  Various changes to UI and interactions
 // @match    *://clocktower.live/*
-// @grant    none
+// @grant    GM_addStyle
 // ==/UserScript==
 
 (function () {
   const data_LHF_Unlovable = getDataUri("./media/LHF_Unlovable.ttf")
   
-  const data_nomineeHand = getDataUri("./media/clock-nominee.webp")
-  const data_nominatorHand = getDataUri("./media/clock-vote.webp")
-  
+  const data_nomineeHand = getDataUri("./media/clock-vote.webp")
+  const data_nomineePoint = getDataUri("./media/clock-nominee.webp")
+  const data_nominatorHand = getDataUri("./media/clock-nominator.webp")
+
   const data_TokenImage = getDataUri("./media/token.webp")
   const data_Reminder = getDataUri("./media/reminder.webp")
   const data_lifeToken = getDataUri("./media/life.webp")
@@ -31,8 +32,7 @@
   
   'use strict';
 
-  const style = document.createElement('style');
-  style.textContent = `
+  GM_addStyle(`
     @font-face {
       font-family: "LHF_Unlovable";
       src: url("${data_LHF_Unlovable}") format("truetype");
@@ -239,12 +239,23 @@
       background-position: unset !important;
       flex: 0 0 64px !important;
     }
-  `
-  document.head.appendChild(style);
+    .arrows {
+      height: 180% !important;
+      width: 30% !important;
+      filter: drop-shadow(3px 3px 1px #0005) !important;
+    }
+    .arrows span {
+      background-size: contain !important;
+      filter: unset !important;
+    }
+    .nominee.nominee-point::before {
+      background-image: url("${data_nomineePoint}") !important;
+    }
+  `)
 
   let updateScheduled = false;
 
-  function updateEdition() {
+  function handleEdition() {
     const info = document.querySelector('.info');
     const edition = info?.querySelector('.edition');
 
@@ -293,12 +304,48 @@
     if (edition.nextElementSibling !== li) {edition.insertAdjacentElement('afterend', li);}
   }
 
-  function updateDisplay() {
-    updateScheduled = false;
-
-    updateEdition()
+  function handleNomText() {
+    const Vote = document.getElementById("vote")
+    if (!Vote) return;
+    const overlay = Vote.querySelector('.overlay');
+    if (!overlay || overlay.classList.contains("processed")) return;
+    let foundFirstPlayer = false;
+    let brFound = false
+    for (const node of overlay.childNodes) {
+      console.log(node.tagName)
+      if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'BR') {node.remove(); brFound = true; continue;}
+      if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'AUDIO') {continue;}
+      if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'EM' && !brFound) {
+        foundFirstPlayer = true;
+        node.style.display = 'none';
+        continue;
+      }
+      if (foundFirstPlayer && node.nodeType === Node.TEXT_NODE) {node.textContent = '';}
+    }
+    overlay.classList.add("processed")
   }
 
+  function handleNomHand() {
+    const Vote = document.getElementById("vote")
+    if (!Vote) return;
+    const hands = Vote.querySelector('.arrows');
+    if (!hands) return;
+    if (hands.querySelector(".nominee-point")) return;
+    const nominee = Vote.querySelector('.nominee:not(.nominee-point)')
+    const nominator = Vote.querySelector('.nominator')
+    const nomineePoint = nominee.cloneNode(true);
+    nomineePoint.classList.add("nominee-point")
+    nominee.insertAdjacentElement("beforebegin",nomineePoint)
+    nomineePoint.insertAdjacentElement("beforebegin",nominator)
+
+  }
+
+  function updateDisplay() {
+    updateScheduled = false
+    handleEdition()
+    handleNomText()
+    handleNomHand()
+  }
 
   function scheduleUpdate() {
     if (updateScheduled) {return;}
