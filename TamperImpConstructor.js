@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name     TamperImp
 // @namespace  https://raw.githubusercontent.com/Owen-Exon/TamperImp/refs/heads/main/TamperImp.js
-// @version    0.0.8
+// @version    0.0.10
 // @description  Various changes to UI and interactions
 // @match    *://clocktower.live/*
 // @grant    GM_addStyle
@@ -64,7 +64,7 @@
       background-image: url("${data_nominatorHand}") !important;
     }
     .roles .modal {
-      max-width: 80% !important;
+      max-width: 70% !important;
     }
     .info .edition {
       display:none !important;
@@ -251,6 +251,34 @@
     .nominee.nominee-point::before {
       background-image: url("${data_nomineePoint}") !important;
     }
+    .player>.name {
+      position: absolute !important;
+      top: 50% !important;
+      left: 50% !important;
+      width: fit-content !important;
+    }
+    .circle .player {
+      margin-bottom:0 !important;
+    }
+    #townsquare {
+      padding: 70px !important
+    }
+    .player>.menu {
+      margin:0 !important;
+      position: absolute !important;
+    }
+    .player>.menu::before {
+      all: unset !important;
+    }
+    .player>.menu,
+    .token .ability,
+    .night-order .description {
+      background-color: #000 !important
+    }
+    .night-order em {
+      width: 30px !important;
+      height: 30px !important;
+    }
   `)
 
   let updateScheduled = false;
@@ -312,7 +340,6 @@
     let foundFirstPlayer = false;
     let brFound = false
     for (const node of overlay.childNodes) {
-      console.log(node.tagName)
       if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'BR') {node.remove(); brFound = true; continue;}
       if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'AUDIO') {continue;}
       if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'EM' && !brFound) {
@@ -340,11 +367,31 @@
 
   }
 
+  function handlePlayerNames() {
+    const nameLabels = document.querySelectorAll(".player>.name")
+    for (const name of nameLabels) {
+      const parent = name.parentElement
+      const matrix = new DOMMatrix(getComputedStyle(parent).transform);
+      const rotation = Math.atan2(matrix.b, matrix.a);
+      
+      const [nameWidth,nameHeight] = [name.clientWidth,name.clientHeight]
+      const [pWidth,pHeight] = [parent.clientWidth,parent.clientHeight]
+      const factor = 1.2
+
+      const nameX = -Math.sin(rotation) * ((nameWidth + pWidth)/2) * factor ;
+      const nameY = -Math.cos(rotation) * ((nameHeight + pHeight)/2) * factor ;
+
+      name.style.transform = `translate(-50%, -50%)  translate(${nameX}px, ${nameY}px)`;
+    }
+    
+  }
+
   function updateDisplay() {
     updateScheduled = false
     handleEdition()
     handleNomText()
     handleNomHand()
+    handlePlayerNames()
   }
 
   function scheduleUpdate() {
