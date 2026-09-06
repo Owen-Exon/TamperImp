@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name     TamperImp
 // @namespace  https://raw.githubusercontent.com/Owen-Exon/TamperImp/refs/heads/main/TamperImp.js
-// @version    0.0.11
+// @version    0.0.12
 // @description  Various changes to UI and interactions
 // @match    *://clocktower.live/*
 // @grant    GM_addStyle
@@ -53,6 +53,12 @@
     }
     .player.you .token {
       animation: nochar-glow 5s ease-in-out infinite;
+    }
+    .player > .two-votes {
+      display:none !important;
+    }
+    .player.two-votes > .menu li:has(.two-votes-icon)::after {
+    content:"✓";
     }
     .token {
       background-image: url("${data_TokenImage}") !important;
