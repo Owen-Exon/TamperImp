@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name     TamperImp
 // @namespace  https://raw.githubusercontent.com/Owen-Exon/TamperImp/refs/heads/main/TamperImp.js
-// @version    0.0.10
+// @version    0.0.11
 // @description  Various changes to UI and interactions
 // @match    *://clocktower.live/*
 // @grant    GM_addStyle
@@ -38,6 +38,22 @@
       src: url("${data_LHF_Unlovable}") format("truetype");
       font-display: swap;
     }
+    @keyframes nochar-glow {
+      0% {
+        box-shadow: 0 0 #fff;
+        border-color: #fff
+      }
+      50% {
+        border-color: #000
+      }
+      to {
+        box-shadow: 0 0 20px 16px transparent;
+        border-color: #fff
+      }
+    }
+    .player.you .token {
+      animation: nochar-glow 5s ease-in-out infinite;
+    }
     .token {
       background-image: url("${data_TokenImage}") !important;
     }
@@ -63,7 +79,7 @@
     .nominator::before {
       background-image: url("${data_nominatorHand}") !important;
     }
-    .roles .modal {
+    .roles .modal:not(.maximized) {
       max-width: 70% !important;
     }
     .info .edition {
@@ -126,6 +142,12 @@
       background-image: url("${data_voteToken}") !important;
       background-size: 70% !important;
     }
+    .player:not(:has(.seat)) > .name {
+      border-color:#f00 !important;
+    }
+    .player .seat {
+      display:none !important;
+    }
     .info {
       padding: 5px !important;
       background: rgba(0, 0, 0, 0.5) !important;
@@ -164,13 +186,12 @@
     .has-vote {
       background: url("${data_voteToken}") center center no-repeat !important;
       background-size: contain !important;
-      width: 1.5em !important;
-      height: 1.5em !important;
-    }
-    .has-vote {
-      margin-top: -25% !important;
-      right: -3% !important;
+      width: 25% !important;
+      height: 25% !important;
       cursor:pointer !important;
+      left:50% !important;
+      top:0 !important;
+      translate: -50% 65% !important;
     }
     span:has(> .alive) {
       order: -1 !important
