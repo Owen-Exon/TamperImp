@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name     TamperImp
 // @namespace  https://raw.githubusercontent.com/Owen-Exon/TamperImp/refs/heads/main/TamperImp.js
-// @version    0.0.14
+// @version    0.0.15
 // @author    Owen-Exon
 // @description  Various changes to UI and interactions
 // @match    *://clocktower.live/*
@@ -205,7 +205,6 @@
       background-size: contain !important;
       width: 25% !important;
       height: 25% !important;
-      cursor:pointer !important;
       left:50% !important;
       top:0 !important;
       translate: -50% 65% !important;
@@ -304,6 +303,10 @@
     .player>.menu {
       margin:0 !important;
       position: absolute !important;
+      top:50% !important;
+      left:50% !important;
+      right: unset !important;
+      bottom: unset !important;
     }
     .player>.menu::before {
       all: unset !important;
@@ -416,10 +419,22 @@
       const [pWidth,pHeight] = [parent.clientWidth,parent.clientHeight]
       const factor = 1.2
 
-      const nameX = -Math.sin(rotation) * ((nameWidth + pWidth)/2) * factor ;
-      const nameY = -Math.cos(rotation) * ((nameHeight + pHeight)/2) * factor ;
+      const xProp = -Math.sin(rotation)
+      const yProp = -Math.cos(rotation)
+
+      const nameX = xProp * ((nameWidth + pWidth)/2) * factor ;
+      const nameY = yProp * ((nameHeight + pHeight)/2) * factor ;
 
       name.style.transform = `translate(-50%, -50%)  translate(${nameX}px, ${nameY}px)`;
+      
+      
+      const menu = parent.querySelector(".menu")
+      if (menu) {
+        const [menuWidth,menuHeight] = [menu.clientWidth,menu.clientHeight]
+        const menuX = -xProp * (menuWidth/4) ;
+        const menuY = -yProp * (menuHeight/4) ;
+        menu.style.translate = `calc(-50% + ${menuX}px) calc(-50% + ${menuY}px)`;
+      }
     }
     
   }
