@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name     TamperImp
 // @namespace  https://raw.githubusercontent.com/Owen-Exon/TamperImp/refs/heads/main/TamperImp.js
-// @version    0.0.12
+// @version    0.0.13
 // @description  Various changes to UI and interactions
 // @match    *://clocktower.live/*
 // @grant    GM_addStyle
@@ -16,6 +16,7 @@
 
   const data_TokenImage = getDataUri("./media/token.webp")
   const data_Reminder = getDataUri("./media/reminder.webp")
+  const data_ReminderNight = getDataUri("./media/reminderCircle.svg")
   const data_lifeToken = getDataUri("./media/life.webp")
   const data_TravelerLifeToken = getDataUri("./media/travelerLife.webp")
   const data_deathToken = getDataUri("./media/death.webp")
@@ -62,6 +63,10 @@
     }
     .token {
       background-image: url("${data_TokenImage}") !important;
+    }
+    .reminder-token {
+      background-image: url("${data_ReminderNight}") !important;
+      border: unset !important;
     }
     ul.tokens li:not(.count) {
       min-width: 120px !important;
