@@ -1,7 +1,8 @@
 // ==UserScript==
 // @name     TamperImp
 // @namespace  https://raw.githubusercontent.com/Owen-Exon/TamperImp/refs/heads/main/TamperImp.js
-// @version    0.0.13
+// @version    0.0.14
+// @author    Owen-Exon
 // @description  Various changes to UI and interactions
 // @match    *://clocktower.live/*
 // @grant    GM_addStyle
@@ -51,6 +52,11 @@
         box-shadow: 0 0 20px 16px transparent;
         border-color: #fff
       }
+    }
+    .intro .footer::after {
+      content: "\\A Running with TamperImp";
+      color:#f00;
+      white-space: pre;
     }
     .player.you .token {
       animation: nochar-glow 5s ease-in-out infinite;
