@@ -4,7 +4,7 @@
 // @homepage https://github.com/Owen-Exon/TamperImp
 // @copyright cc
 // @icon https://release.botc.app/resources/characters/generic/evil.webp
-// @version 0.0.17
+// @version 0.0.18
 // @author Owen-Exon
 // @description Changes on clocktower.live to better match the official app and improve some functionality.
 // @match *://clocktower.live/*
@@ -313,6 +313,7 @@
       left:50% !important;
       right: unset !important;
       bottom: unset !important;
+      z-index:100 !important;
     }
     .player>.menu::before {
       all: unset !important;
@@ -419,30 +420,57 @@
     for (const name of nameLabels) {
       const parent = name.parentElement
       const matrix = new DOMMatrix(getComputedStyle(parent).transform);
-      const rotation = Math.atan2(matrix.b, matrix.a);
-      
-      const [nameWidth,nameHeight] = [name.clientWidth,name.clientHeight]
-      const [pWidth,pHeight] = [parent.clientWidth,parent.clientHeight]
-      const factor = 1.2
+      const theta = Math.atan2(matrix.b, matrix.a);
+      const [halfNameWidth,halfNameHeight] = [name.clientWidth/2,name.clientHeight/2]
+      const radius = parent.clientWidth/2
 
-      const xProp = -Math.sin(rotation)
-      const yProp = -Math.cos(rotation)
+      const sin = Math.sin(theta)
+      const cos = Math.cos(theta)
 
-      const nameX = xProp * ((nameWidth + pWidth)/2) * factor ;
-      const nameY = yProp * ((nameHeight + pHeight)/2) * factor ;
+      const absSin = Math.abs(sin);
+      const absCos = Math.abs(cos);
 
-      name.style.transform = `translate(-50%, -50%)  translate(${nameX}px, ${nameY}px)`;
-      
-      
+      const candidates = [];
+
+      // Nearest point is on a horizontal edge
+      if (absSin > 0) {
+        const testDist = (radius + halfNameWidth) / absSin;
+        if (testDist * absCos <= halfNameHeight) {candidates.push(testDist);}
+      }
+
+      // Nearest point is on a vertical edge
+      if (absCos > 0) {
+        const testDist = (radius + halfNameHeight) / absCos;
+        if (testDist * absSin <= halfNameWidth) {
+          candidates.push(testDist);
+        }
+      }
+
+      // Nearest point is a corner
+      const projection = halfNameWidth * absSin + halfNameHeight * absCos;
+      const discriminant = (projection ** 2) - ((halfNameWidth ** 2) + (halfNameHeight ** 2) - (radius ** 2));
+
+      if (discriminant >= 0) {
+        const testDist = projection + Math.sqrt(discriminant);
+        if (testDist * absSin >= halfNameWidth && testDist * absCos >= halfNameHeight) {
+          candidates.push(testDist);
+        }
+      }
+
+      const minDist = Math.min(...candidates) + 10;
+
+      const nameX = -minDist * sin
+      const nameY = -minDist * cos
+
+      name.style.transform = `translate(-50%, -50%) translate(${nameX}px, ${nameY}px)`;
+        
       const menu = parent.querySelector(".menu")
       if (menu) {
-        const [menuWidth,menuHeight] = [menu.clientWidth,menu.clientHeight]
-        const menuX = -xProp * (menuWidth/4) ;
-        const menuY = -yProp * (menuHeight/4) ;
-        menu.style.translate = `calc(-50% + ${menuX}px) calc(-50% + ${menuY}px)`;
+        const halfMenuHeight = menu.clientHeight / 2
+        const menuYOffset = (halfMenuHeight + halfNameHeight + 10) * (cos > 0 ? 1 : -1)
+        menu.style.translate = `calc(-50% + ${nameX}px) calc(-50% + ${nameY}px + ${menuYOffset}px)`;
       }
     }
-    
   }
 
   function updateDisplay() {
