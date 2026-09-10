@@ -4,14 +4,15 @@
 // @homepage https://github.com/Owen-Exon/TamperImp
 // @copyright cc
 // @icon https://release.botc.app/resources/characters/generic/evil.webp
-// @version 0.0.18
+// @version 0.0.19
 // @author Owen-Exon
 // @description Changes on clocktower.live to better match the official app and improve some functionality.
 // @match *://clocktower.live/*
-// @grant GM_addStyle
 // @updateURL https://raw.githubusercontent.com/Owen-Exon/TamperImp/refs/heads/main/TamperImp.js
 // @downloadURL https://raw.githubusercontent.com/Owen-Exon/TamperImp/refs/heads/main/TamperImp.js
 // @supportURL https://github.com/Owen-Exon/TamperImp/issues
+// @grant GM_addStyle
+// @grant GM_info
 // ==/UserScript==
 
 (function () {
@@ -60,7 +61,7 @@
       }
     }
     .intro .footer::after {
-      content: "\\A TamperImp is Active";
+      content: "\\A TamperImp is Active (v${GM_info.script.version})";
       color:#f00;
       white-space: pre;
     }
@@ -304,7 +305,7 @@
       margin-bottom:0 !important;
     }
     #townsquare {
-      padding: 70px !important
+      padding: 60px !important
     }
     .player>.menu {
       margin:0 !important;
@@ -467,7 +468,7 @@
       const menu = parent.querySelector(".menu")
       if (menu) {
         const halfMenuHeight = menu.clientHeight / 2
-        const menuYOffset = (halfMenuHeight + halfNameHeight + 10) * (cos > 0 ? 1 : -1)
+        const menuYOffset = (halfMenuHeight + halfNameHeight + 10) * Math.sign(cos)
         menu.style.translate = `calc(-50% + ${nameX}px) calc(-50% + ${nameY}px + ${menuYOffset}px)`;
       }
     }
