@@ -1,11 +1,17 @@
 // ==UserScript==
-// @name     TamperImp
-// @namespace  https://raw.githubusercontent.com/Owen-Exon/TamperImp/refs/heads/main/TamperImp.js
-// @version    0.0.16
-// @author    Owen-Exon
-// @description  Changes on clocktower.live to better match the official app and improve some functionality.
-// @match    *://clocktower.live/*
-// @grant    GM_addStyle
+// @name TamperImp
+// @namespace https://github.com/Owen-Exon/TamperImp
+// @homepage https://github.com/Owen-Exon/TamperImp
+// @copyright cc
+// @icon https://release.botc.app/resources/characters/generic/evil.webp
+// @version 0.0.17
+// @author Owen-Exon
+// @description Changes on clocktower.live to better match the official app and improve some functionality.
+// @match *://clocktower.live/*
+// @grant GM_addStyle
+// @updateURL https://raw.githubusercontent.com/Owen-Exon/TamperImp/refs/heads/main/TamperImp.js
+// @downloadURL https://raw.githubusercontent.com/Owen-Exon/TamperImp/refs/heads/main/TamperImp.js
+// @supportURL https://github.com/Owen-Exon/TamperImp/issues
 // ==/UserScript==
 
 (function () {
