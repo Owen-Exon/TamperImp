@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name     TamperImp
 // @namespace  https://raw.githubusercontent.com/Owen-Exon/TamperImp/refs/heads/main/TamperImp.js
-// @version    0.0.15
+// @version    0.0.16
 // @author    Owen-Exon
-// @description  Various changes to UI and interactions
+// @description  Changes on clocktower.live to better match the official app and improve some functionality.
 // @match    *://clocktower.live/*
 // @grant    GM_addStyle
 // ==/UserScript==
@@ -54,7 +54,7 @@
       }
     }
     .intro .footer::after {
-      content: "\\A Running with TamperImp";
+      content: "\\A TamperImp is Active";
       color:#f00;
       white-space: pre;
     }
