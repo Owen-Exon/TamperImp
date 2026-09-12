@@ -4,7 +4,7 @@
 // @homepage https://github.com/Owen-Exon/TamperImp
 // @copyright cc
 // @icon https://release.botc.app/resources/characters/generic/evil.webp
-// @version 0.0.19
+// @version 0.0.20
 // @author Owen-Exon
 // @description Changes on clocktower.live to better match the official app and improve some functionality.
 // @match *://clocktower.live/*
@@ -305,7 +305,7 @@
       margin-bottom:0 !important;
     }
     #townsquare {
-      padding: 60px !important
+      padding: 75px !important
     }
     .player>.menu {
       margin:0 !important;
